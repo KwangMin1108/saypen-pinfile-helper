@@ -20,8 +20,10 @@
       color: #fff;
       padding: 20px 24px 16px;
     }
+    header { display: flex; align-items: flex-start; justify-content: space-between; }
     header h1 { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.3px; }
     header p  { font-size: 0.82rem; opacity: 0.85; margin-top: 3px; }
+    .ver-badge { font-size: 0.7rem; opacity: 0.55; flex-shrink: 0; margin-top: 3px; }
 
     .container { max-width: 960px; margin: 0 auto; padding: 20px 16px; }
 
@@ -203,8 +205,11 @@
 <body>
 
 <header>
-  <h1>📌 세이펜 핀파일 조회기</h1>
-  <p>출판사를 선택하거나 검색어를 입력하세요</p>
+  <div>
+    <h1>📌 세이펜 핀파일 조회기</h1>
+    <p>출판사를 선택하거나 검색어를 입력하세요</p>
+  </div>
+  <span class="ver-badge">v260503.1</span>
 </header>
 
 <div class="container">
