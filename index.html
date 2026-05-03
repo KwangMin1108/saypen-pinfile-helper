@@ -170,6 +170,12 @@
       padding: 11px 14px; text-align: left;
       font-weight: 600; white-space: nowrap;
     }
+    thead th.sortable {
+      cursor: pointer; user-select: none;
+    }
+    thead th.sortable:hover { background: #1560aa; }
+    thead th .sort-icon { margin-left: 4px; opacity: 0.5; font-size: 0.75rem; }
+    thead th.sorted .sort-icon { opacity: 1; }
     thead th.right { text-align: right; }
     tbody tr { border-bottom: 1px solid #eef0f4; transition: background .1s; }
     tbody tr:last-child { border-bottom: none; }
@@ -181,6 +187,7 @@
     td.title     { font-weight: 500; }
     td.pin       { color: #444; font-family: monospace; font-size: 0.85rem; white-space: nowrap; }
     td.size      { text-align: right; color: #666; white-space: nowrap; }
+    td.updated   { color: #888; font-size: 0.8rem; white-space: nowrap; }
     .owned-mark {
       display: inline-block; width: 7px; height: 7px;
       background: #3a9e4a; border-radius: 50%;
@@ -197,8 +204,8 @@
     @keyframes spin { to { transform: rotate(360deg); } }
 
     @media (max-width: 600px) {
-      td.publisher { display: none; }
-      thead th:first-child { display: none; }
+      td.publisher, td.updated { display: none; }
+      thead th:first-child, thead th:last-child { display: none; }
     }
   </style>
 </head>
@@ -275,6 +282,8 @@
   let ALL_DATA    = [];
   let ownedSet    = null;
   let selectedPub = null;
+  let sortKey     = 'publisher';
+  let sortDir     = 'asc';
 
   // ── 데이터 로드 ──────────────────────────────────────
   async function loadData() {
@@ -296,7 +305,7 @@
     const hasOwned = ownedSet !== null;
 
     if (!hasQuery && !hasPub && !hasOwned) {
-      document.getElementById('countBadge').innerHTML = `전체 <b>${ALL_DATA.length}</b>개`;
+      document.getElementById('countBadge').innerHTML = '';
       renderPublisherTags();
     } else {
       renderResults(query);
@@ -334,6 +343,22 @@
     });
   }
 
+  // ── 정렬 ─────────────────────────────────────────────
+  function sortData(arr) {
+    return [...arr].sort((a, b) => {
+      let va = a[sortKey] ?? '';
+      let vb = b[sortKey] ?? '';
+      if (sortKey === 'sizeMB') {
+        va = parseFloat(va) || 0;
+        vb = parseFloat(vb) || 0;
+        return sortDir === 'asc' ? va - vb : vb - va;
+      }
+      va = String(va); vb = String(vb);
+      const cmp = va.localeCompare(vb, 'ko');
+      return sortDir === 'asc' ? cmp : -cmp;
+    });
+  }
+
   // ── 결과 테이블 ──────────────────────────────────────
   function renderResults(query) {
     let filtered = ALL_DATA;
@@ -353,8 +378,9 @@
       filtered = filtered.filter(item => ownedSet.has(item.fname));
     }
 
-    document.getElementById('countBadge').innerHTML =
-      `<b>${filtered.length}</b> / ${ALL_DATA.length}개`;
+    filtered = sortData(filtered);
+
+    document.getElementById('countBadge').innerHTML = `<b>${filtered.length}</b>개`;
 
     const filterBar = selectedPub
       ? `<div class="active-filter">
@@ -379,19 +405,46 @@
           <td class="title">${dot}${esc(item.title)}</td>
           <td class="pin">${esc(item.pinNumber)}</td>
           <td class="size">${sizeTxt}</td>
+          <td class="updated">${esc(item.updatedAt || '')}</td>
         </tr>`;
+      }).join('');
+
+      const cols = [
+        { key: 'publisher', label: '출판사' },
+        { key: 'title',     label: '책 제목' },
+        { key: 'pinNumber', label: '핀파일 번호' },
+        { key: 'sizeMB',    label: '용량', cls: 'right' },
+        { key: 'updatedAt', label: '업데이트' },
+      ];
+      const headers = cols.map(c => {
+        const isSorted = sortKey === c.key;
+        const icon = isSorted ? (sortDir === 'asc' ? '▲' : '▼') : '⇅';
+        const cls = ['sortable', c.cls, isSorted ? 'sorted' : ''].filter(Boolean).join(' ');
+        return `<th class="${cls}" data-key="${c.key}">${c.label}<span class="sort-icon">${icon}</span></th>`;
       }).join('');
 
       document.getElementById('mainArea').innerHTML = filterBar + `
         <div class="table-wrap">
           <table>
-            <thead><tr>
-              <th>출판사</th><th>책 제목</th><th>핀파일 번호</th><th class="right">용량</th>
-            </tr></thead>
+            <thead><tr>${headers}</tr></thead>
             <tbody>${rows}</tbody>
           </table>
         </div>`;
     }
+
+    // 정렬 클릭 이벤트
+    document.querySelectorAll('thead th.sortable').forEach(th => {
+      th.addEventListener('click', () => {
+        const key = th.dataset.key;
+        if (sortKey === key) {
+          sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+        } else {
+          sortKey = key;
+          sortDir = 'asc';
+        }
+        renderResults(document.getElementById('searchInput').value.trim().toLowerCase());
+      });
+    });
 
     const clearBtn = document.getElementById('clearPub');
     if (clearBtn) {
