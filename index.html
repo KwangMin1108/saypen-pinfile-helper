@@ -280,6 +280,7 @@
 
 <script>
   let ALL_DATA    = [];
+  let PUBLISHERS  = [];   // [{name, count}, ...]
   let ownedSet    = null;
   let selectedPub = null;
   let sortKey     = 'publisher';
@@ -288,8 +289,12 @@
   // ── 데이터 로드 ──────────────────────────────────────
   async function loadData() {
     try {
-      const res = await fetch('data/pinfiles.json');
-      ALL_DATA  = await res.json();
+      const [pinRes, pubRes] = await Promise.all([
+        fetch('data/pinfiles.json'),
+        fetch('data/publishers.json'),
+      ]);
+      ALL_DATA   = await pinRes.json();
+      PUBLISHERS = await pubRes.json();
       render();
     } catch (e) {
       document.getElementById('mainArea').innerHTML =
@@ -314,24 +319,15 @@
 
   // ── 출판사 태그 ──────────────────────────────────────
   function renderPublisherTags() {
-    const pubMap = {};
-    // bookUrl 있는 항목의 출판사만 집계
-    ALL_DATA.forEach(item => {
-      if (!item.bookUrl) return;
-      const p = item.publisher.trim() || '(출판사 없음)';
-      pubMap[p] = (pubMap[p] || 0) + 1;
-    });
-    const pubs = Object.entries(pubMap).sort((a, b) => a[0].localeCompare(b[0], 'ko'));
-
-    const tags = pubs.map(([name, cnt]) =>
+    const tags = PUBLISHERS.map(({ name, count }) =>
       `<span class="pub-tag" data-pub="${esc(name)}">
-        ${esc(name)}<span class="cnt">${cnt}</span>
+        ${esc(name)}<span class="cnt">${count}</span>
       </span>`
     ).join('');
 
     document.getElementById('mainArea').innerHTML = `
       <div class="panel pub-section">
-        <h2>출판사 <span style="font-weight:400">(${pubs.length}개)</span></h2>
+        <h2>출판사 <span style="font-weight:400">(${PUBLISHERS.length}개)</span></h2>
         <div class="pub-tags">${tags}</div>
       </div>`;
 
