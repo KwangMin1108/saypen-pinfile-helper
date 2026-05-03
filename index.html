@@ -23,7 +23,9 @@
     header { display: flex; align-items: flex-start; justify-content: space-between; }
     header h1 { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.3px; }
     header p  { font-size: 0.82rem; opacity: 0.85; margin-top: 3px; }
-    .ver-badge { font-size: 0.7rem; opacity: 0.55; flex-shrink: 0; margin-top: 3px; }
+    .header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; flex-shrink: 0; }
+    .ver-badge    { font-size: 0.7rem; opacity: 0.55; }
+    .update-badge { font-size: 0.7rem; opacity: 0.55; white-space: nowrap; }
 
     .container { max-width: 960px; margin: 0 auto; padding: 20px 16px; }
 
@@ -201,6 +203,13 @@
       background: #3a9e4a; border-radius: 50%;
       margin-right: 5px; vertical-align: middle;
     }
+    .deleted-mark {
+      display: inline-block; font-size: 0.7rem; color: #aaa;
+      border: 1px solid #ccc; border-radius: 3px;
+      padding: 0 4px; margin-right: 5px; vertical-align: middle;
+      white-space: nowrap;
+    }
+    tbody tr.deleted-row { opacity: 0.6; }
 
     .empty { text-align: center; padding: 48px 0; color: #aaa; font-size: 0.95rem; }
     .loading { text-align: center; padding: 48px 0; color: #888; }
@@ -224,7 +233,10 @@
     <h1>📌 세이펜 핀파일 조회기</h1>
     <p>출판사를 선택하거나 검색어를 입력하세요</p>
   </div>
-  <span class="ver-badge">v260503.2</span>
+  <div class="header-right">
+    <span class="ver-badge">v260503.3</span>
+    <span class="update-badge" id="updateBadge"></span>
+  </div>
 </header>
 
 <div class="container">
@@ -287,22 +299,30 @@
 </div>
 
 <script>
-  let ALL_DATA    = [];
-  let PUBLISHERS  = [];   // [{name, count}, ...]
-  let ownedSet    = null;
-  let selectedPub = null;
-  let sortKey     = 'publisher';
-  let sortDir     = 'asc';
+  let ALL_DATA      = [];   // 활성 핀파일 목록
+  let DELETED_DATA  = [];   // 누적 삭제 핀파일 목록
+  let PUBLISHERS    = [];   // [{name, count}, ...]
+  let ownedSet      = null;
+  let selectedPub   = null;
+  let sortKey       = 'publisher';
+  let sortDir       = 'asc';
 
   // ── 데이터 로드 ──────────────────────────────────────
   async function loadData() {
     try {
-      const [pinRes, pubRes] = await Promise.all([
+      const [pinRes, delRes, pubRes, metaRes] = await Promise.all([
         fetch('data/pinfiles.json'),
+        fetch('data/deleted_pinfiles.json'),
         fetch('data/publishers.json'),
+        fetch('data/meta.json'),
       ]);
-      ALL_DATA   = await pinRes.json();
-      PUBLISHERS = await pubRes.json();
+      ALL_DATA     = await pinRes.json();
+      DELETED_DATA = await delRes.json();
+      PUBLISHERS   = await pubRes.json();
+      const meta   = await metaRes.json();
+      if (meta.updatedAt) {
+        document.getElementById('updateBadge').textContent = '핀파일 DB ' + meta.updatedAt;
+      }
       render();
     } catch (e) {
       document.getElementById('mainArea').innerHTML =
@@ -365,7 +385,13 @@
 
   // ── 결과 테이블 ──────────────────────────────────────
   function renderResults(query) {
-    let filtered = ALL_DATA;
+    // 출판사 클릭 시에는 활성 항목만 / txt 업로드 시에는 보유 중인 삭제 항목도 포함
+    const includeDeleted = ownedSet !== null && selectedPub === null;
+    const pool = includeDeleted
+      ? [...ALL_DATA, ...DELETED_DATA.filter(d => ownedSet.has(d.fname)).map(d => ({...d, _deleted: true}))]
+      : ALL_DATA.map(d => ({...d, _deleted: false}));
+
+    let filtered = pool;
 
     if (query) {
       filtered = filtered.filter(item =>
@@ -399,8 +425,11 @@
     } else {
       const rows = filtered.map(item => {
         const owned    = ownedSet && ownedSet.has(item.fname);
-        const rowClass = owned ? ' class="owned"' : '';
-        const dot      = owned ? '<span class="owned-mark"></span>' : '';
+        const isDeleted = item._deleted === true;
+        const classes  = [owned ? 'owned' : '', isDeleted ? 'deleted-row' : ''].filter(Boolean).join(' ');
+        const rowClass = classes ? ` class="${classes}"` : '';
+        const dot      = owned   ? '<span class="owned-mark"></span>' : '';
+        const delMark  = isDeleted ? '<span class="deleted-mark">단종</span>' : '';
         const sizeTxt  = item.sizeMB >= 1
           ? item.sizeMB.toFixed(2) + ' MB'
           : (item.sizeMB * 1024).toFixed(0) + ' KB';
@@ -409,7 +438,7 @@
           : '';
         return `<tr${rowClass}>
           <td class="publisher">${esc(item.publisher)}</td>
-          <td class="title">${dot}${esc(item.title)}${bookLink}</td>
+          <td class="title">${dot}${delMark}${esc(item.title)}${bookLink}</td>
           <td class="pin">${esc(item.pinNumber)}</td>
           <td class="size">${sizeTxt}</td>
           <td class="updated">${esc(item.updatedAt || '')}</td>
