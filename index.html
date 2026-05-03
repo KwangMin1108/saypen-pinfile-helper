@@ -23,10 +23,9 @@
     header h1 { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.3px; }
     header p  { font-size: 0.82rem; opacity: 0.85; margin-top: 3px; }
 
-    /* ── 메인 컨테이너 ── */
     .container { max-width: 960px; margin: 0 auto; padding: 20px 16px; }
 
-    /* ── 검색 / 업로드 패널 ── */
+    /* ── 패널 ── */
     .panel {
       background: #fff;
       border-radius: 10px;
@@ -35,11 +34,8 @@
       margin-bottom: 14px;
     }
 
-    .search-row {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
+    /* ── 검색 ── */
+    .search-row { display: flex; gap: 8px; align-items: center; }
     #searchInput {
       flex: 1;
       padding: 9px 14px;
@@ -51,131 +47,113 @@
     }
     #searchInput:focus { border-color: #1a6fc4; }
 
-    .count-badge {
-      white-space: nowrap;
-      font-size: 0.82rem;
-      color: #666;
-      padding: 0 4px;
-    }
+    .count-badge { white-space: nowrap; font-size: 0.82rem; color: #666; padding: 0 4px; }
     .count-badge b { color: #1a6fc4; }
 
-    /* ── 업로드 영역 ── */
+    /* ── 업로드 ── */
     .upload-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-top: 12px;
-      flex-wrap: wrap;
+      display: flex; align-items: center; gap: 12px;
+      margin-top: 12px; flex-wrap: wrap;
     }
     .upload-btn {
-      display: inline-block;
-      padding: 7px 14px;
-      background: #f0f4fb;
-      border: 1.5px solid #c0cfe0;
-      border-radius: 7px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      color: #1a6fc4;
-      font-weight: 600;
-      transition: background .15s;
+      display: inline-block; padding: 7px 14px;
+      background: #f0f4fb; border: 1.5px solid #c0cfe0;
+      border-radius: 7px; font-size: 0.85rem; cursor: pointer;
+      color: #1a6fc4; font-weight: 600; transition: background .15s;
     }
     .upload-btn:hover { background: #dde8f7; }
     #fileInput { display: none; }
-
-    .upload-info {
-      font-size: 0.83rem;
-      color: #555;
-    }
+    .upload-info { font-size: 0.83rem; color: #555; }
     .upload-info b { color: #1a6fc4; }
-
     .toggle-label {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      color: #333;
-      user-select: none;
+      display: flex; align-items: center; gap: 6px;
+      font-size: 0.85rem; cursor: pointer; color: #333; user-select: none;
     }
     .toggle-label input { cursor: pointer; accent-color: #1a6fc4; }
-    #ownedToggle:disabled + span { color: #aaa; }
+
+    /* ── 출판사 태그 ── */
+    .pub-section { }
+    .pub-section h2 {
+      font-size: 0.85rem; font-weight: 600; color: #888;
+      margin-bottom: 12px; letter-spacing: 0.2px;
+    }
+    .pub-tags {
+      display: flex; flex-wrap: wrap; gap: 7px;
+    }
+    .pub-tag {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 5px 11px;
+      background: #f0f4fb;
+      border: 1.5px solid #d0daea;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: background .12s, border-color .12s, color .12s;
+      color: #334;
+      user-select: none;
+    }
+    .pub-tag:hover { background: #dde8f7; border-color: #a0bce0; }
+    .pub-tag.active {
+      background: #1a6fc4; border-color: #1a6fc4;
+      color: #fff; font-weight: 600;
+    }
+    .pub-tag .cnt {
+      font-size: 0.72rem; opacity: 0.65;
+    }
+    .pub-tag.active .cnt { opacity: 0.8; }
+
+    /* ── 선택된 출판사 표시 ── */
+    .active-filter {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 10px; flex-wrap: wrap;
+    }
+    .active-filter-label {
+      font-size: 0.83rem; color: #555;
+    }
+    .clear-btn {
+      font-size: 0.78rem; color: #1a6fc4; cursor: pointer;
+      text-decoration: underline; background: none; border: none; padding: 0;
+    }
+    .clear-btn:hover { color: #c0392b; }
 
     /* ── 테이블 ── */
     .table-wrap {
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 1px 4px rgba(0,0,0,.08);
-      overflow: hidden;
+      background: #fff; border-radius: 10px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.08); overflow: hidden;
     }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.875rem;
-    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
     thead th {
-      background: #1a6fc4;
-      color: #fff;
-      padding: 11px 14px;
-      text-align: left;
-      font-weight: 600;
-      white-space: nowrap;
+      background: #1a6fc4; color: #fff;
+      padding: 11px 14px; text-align: left;
+      font-weight: 600; white-space: nowrap;
     }
     thead th.right { text-align: right; }
-
-    tbody tr {
-      border-bottom: 1px solid #eef0f4;
-      transition: background .1s;
-    }
+    tbody tr { border-bottom: 1px solid #eef0f4; transition: background .1s; }
     tbody tr:last-child { border-bottom: none; }
     tbody tr:hover { background: #f0f6ff; }
     tbody tr.owned { background: #e8f4e8; }
     tbody tr.owned:hover { background: #d6edda; }
-
-    td {
-      padding: 10px 14px;
-      vertical-align: middle;
-    }
+    td { padding: 10px 14px; vertical-align: middle; }
     td.publisher { color: #555; font-size: 0.82rem; white-space: nowrap; }
     td.title     { font-weight: 500; }
     td.pin       { color: #444; font-family: monospace; font-size: 0.85rem; white-space: nowrap; }
     td.size      { text-align: right; color: #666; white-space: nowrap; }
-
     .owned-mark {
-      display: inline-block;
-      width: 7px; height: 7px;
-      background: #3a9e4a;
-      border-radius: 50%;
-      margin-right: 5px;
-      vertical-align: middle;
+      display: inline-block; width: 7px; height: 7px;
+      background: #3a9e4a; border-radius: 50%;
+      margin-right: 5px; vertical-align: middle;
     }
 
-    /* ── 빈 결과 ── */
-    .empty {
-      text-align: center;
-      padding: 48px 0;
-      color: #aaa;
-      font-size: 0.95rem;
-    }
-
-    /* ── 로딩 ── */
-    .loading {
-      text-align: center;
-      padding: 48px 0;
-      color: #888;
-    }
+    /* ── 빈 결과 / 로딩 ── */
+    .empty { text-align: center; padding: 48px 0; color: #aaa; font-size: 0.95rem; }
+    .loading { text-align: center; padding: 48px 0; color: #888; }
     .spinner {
-      display: inline-block;
-      width: 28px; height: 28px;
-      border: 3px solid #dde;
-      border-top-color: #1a6fc4;
-      border-radius: 50%;
-      animation: spin .7s linear infinite;
-      margin-bottom: 10px;
+      display: inline-block; width: 28px; height: 28px;
+      border: 3px solid #dde; border-top-color: #1a6fc4;
+      border-radius: 50%; animation: spin .7s linear infinite; margin-bottom: 10px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── 반응형 ── */
     @media (max-width: 600px) {
       td.publisher { display: none; }
       thead th:first-child { display: none; }
@@ -186,7 +164,7 @@
 
 <header>
   <h1>📌 세이펜 핀파일 조회기</h1>
-  <p>책 제목, 출판사, 핀파일 번호로 검색하세요</p>
+  <p>출판사를 선택하거나 검색어를 입력하세요</p>
 </header>
 
 <div class="container">
@@ -197,7 +175,6 @@
       <input id="searchInput" type="search" placeholder="책 제목 / 출판사 / 핀파일 번호 검색..." autocomplete="off">
       <span class="count-badge" id="countBadge"></span>
     </div>
-
     <div class="upload-row">
       <label class="upload-btn" for="fileInput">📂 내 핀파일 목록 업로드</label>
       <input type="file" id="fileInput" accept=".txt">
@@ -209,41 +186,83 @@
     </div>
   </div>
 
-  <!-- 결과 테이블 -->
-  <div class="table-wrap" id="tableWrap">
-    <div class="loading">
-      <div class="spinner"></div><br>데이터 불러오는 중...
-    </div>
+  <!-- 출판사 태그 or 결과 테이블 -->
+  <div id="mainArea">
+    <div class="loading"><div class="spinner"></div><br>데이터 불러오는 중...</div>
   </div>
 
 </div>
 
 <script>
-  // ── 상태 ──────────────────────────────────────────────
-  let ALL_DATA   = [];    // 전체 핀파일 목록
-  let ownedSet   = null;  // 사용자 보유 핀파일 Set (fname 기준)
-  let showOwned  = false;
+  let ALL_DATA      = [];
+  let ownedSet      = null;
+  let showOwned     = false;
+  let selectedPub   = null;   // 선택된 출판사
 
   // ── 데이터 로드 ──────────────────────────────────────
   async function loadData() {
     try {
-      const res  = await fetch('data/pinfiles.json');
-      ALL_DATA   = await res.json();
+      const res = await fetch('data/pinfiles.json');
+      ALL_DATA  = await res.json();
       render();
     } catch (e) {
-      document.getElementById('tableWrap').innerHTML =
+      document.getElementById('mainArea').innerHTML =
         '<div class="empty">데이터를 불러올 수 없습니다.<br><small>' + e.message + '</small></div>';
     }
   }
 
-  // ── 렌더 ─────────────────────────────────────────────
+  // ── 메인 렌더 ────────────────────────────────────────
   function render() {
-    const query  = document.getElementById('searchInput').value.trim().toLowerCase();
-    const toggle = document.getElementById('ownedToggle');
+    const query = document.getElementById('searchInput').value.trim().toLowerCase();
+    const hasQuery = query.length > 0;
+    const hasPub   = selectedPub !== null;
+    const hasOwned = showOwned && ownedSet;
 
+    if (!hasQuery && !hasPub && !hasOwned) {
+      // 기본: 출판사 태그 보기
+      document.getElementById('countBadge').innerHTML = `전체 <b>${ALL_DATA.length}</b>개`;
+      renderPublisherTags();
+    } else {
+      // 검색/필터 결과 보기
+      renderResults(query);
+    }
+  }
+
+  // ── 출판사 태그 ──────────────────────────────────────
+  function renderPublisherTags() {
+    // 출판사별 카운트
+    const pubMap = {};
+    ALL_DATA.forEach(item => {
+      const p = item.publisher.trim() || '(출판사 없음)';
+      pubMap[p] = (pubMap[p] || 0) + 1;
+    });
+    const pubs = Object.entries(pubMap).sort((a, b) => a[0].localeCompare(b[0], 'ko'));
+
+    const tags = pubs.map(([name, cnt]) => {
+      const isActive = selectedPub === name;
+      return `<span class="pub-tag${isActive ? ' active' : ''}" data-pub="${esc(name)}">
+        ${esc(name)}<span class="cnt">${cnt}</span>
+      </span>`;
+    }).join('');
+
+    document.getElementById('mainArea').innerHTML = `
+      <div class="panel pub-section">
+        <h2>출판사 <span style="font-weight:400">(${pubs.length}개)</span></h2>
+        <div class="pub-tags">${tags}</div>
+      </div>`;
+
+    document.querySelectorAll('.pub-tag').forEach(el => {
+      el.addEventListener('click', () => {
+        selectedPub = el.dataset.pub;
+        render();
+      });
+    });
+  }
+
+  // ── 결과 테이블 ──────────────────────────────────────
+  function renderResults(query) {
     let filtered = ALL_DATA;
 
-    // 검색 필터
     if (query) {
       filtered = filtered.filter(item =>
         item.publisher.toLowerCase().includes(query) ||
@@ -252,110 +271,110 @@
         item.fname.toLowerCase().includes(query)
       );
     }
-
-    // 내 것만 보기 필터
+    if (selectedPub) {
+      filtered = filtered.filter(item => item.publisher.trim() === selectedPub);
+    }
     if (showOwned && ownedSet) {
       filtered = filtered.filter(item => ownedSet.has(item.fname));
     }
 
     // 카운트 배지
     const badge = document.getElementById('countBadge');
-    if (query || showOwned) {
-      badge.innerHTML = `<b>${filtered.length}</b> / ${ALL_DATA.length}개`;
-    } else {
-      badge.innerHTML = `전체 <b>${ALL_DATA.length}</b>개`;
-    }
+    badge.innerHTML = `<b>${filtered.length}</b> / ${ALL_DATA.length}개`;
 
-    // 테이블 렌더
+    // 선택 출판사 + 초기화 버튼
+    const filterBar = selectedPub
+      ? `<div class="active-filter">
+           <span class="active-filter-label">📂 <b>${esc(selectedPub)}</b></span>
+           <button class="clear-btn" id="clearPub">✕ 선택 해제</button>
+         </div>`
+      : '';
+
     if (filtered.length === 0) {
-      document.getElementById('tableWrap').innerHTML =
-        '<div class="empty">검색 결과가 없습니다</div>';
-      return;
+      document.getElementById('mainArea').innerHTML =
+        filterBar + '<div class="table-wrap"><div class="empty">검색 결과가 없습니다</div></div>';
+    } else {
+      const rows = filtered.map(item => {
+        const owned    = ownedSet && ownedSet.has(item.fname);
+        const rowClass = owned ? ' class="owned"' : '';
+        const dot      = owned ? '<span class="owned-mark"></span>' : '';
+        const sizeTxt  = item.sizeMB >= 1
+          ? item.sizeMB.toFixed(2) + ' MB'
+          : (item.sizeMB * 1024).toFixed(0) + ' KB';
+        return `<tr${rowClass}>
+          <td class="publisher">${esc(item.publisher)}</td>
+          <td class="title">${dot}${esc(item.title)}</td>
+          <td class="pin">${esc(item.pinNumber)}</td>
+          <td class="size">${sizeTxt}</td>
+        </tr>`;
+      }).join('');
+
+      document.getElementById('mainArea').innerHTML = filterBar + `
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>출판사</th><th>책 제목</th><th>핀파일 번호</th><th class="right">용량</th>
+            </tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>`;
     }
 
-    const rows = filtered.map(item => {
-      const owned   = ownedSet && ownedSet.has(item.fname);
-      const rowClass = owned ? ' class="owned"' : '';
-      const dot      = owned ? '<span class="owned-mark"></span>' : '';
-      const sizeTxt  = item.sizeMB >= 1
-        ? item.sizeMB.toFixed(2) + ' MB'
-        : (item.sizeMB * 1024).toFixed(0) + ' KB';
-      return `<tr${rowClass}>
-        <td class="publisher">${esc(item.publisher)}</td>
-        <td class="title">${dot}${esc(item.title)}</td>
-        <td class="pin">${esc(item.pinNumber)}</td>
-        <td class="size">${sizeTxt}</td>
-      </tr>`;
-    }).join('');
-
-    document.getElementById('tableWrap').innerHTML = `
-      <table>
-        <thead>
-          <tr>
-            <th>출판사</th>
-            <th>책 제목</th>
-            <th>핀파일 번호</th>
-            <th class="right">용량</th>
-          </tr>
-        </thead>
-        <tbody>${rows}</tbody>
-      </table>`;
+    // 출판사 선택 해제 버튼
+    const clearBtn = document.getElementById('clearPub');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        selectedPub = null;
+        render();
+      });
+    }
   }
 
-  // ── 파일 업로드 파싱 ─────────────────────────────────
+  // ── 파일 업로드 ──────────────────────────────────────
   document.getElementById('fileInput').addEventListener('change', function(e) {
     const file = e.target.files[0];
     if (!file) return;
-
     const reader = new FileReader();
     reader.onload = function(ev) {
       const lines = ev.target.result.split(/\r?\n/);
       ownedSet = new Set();
-
       lines.forEach(line => {
         line = line.trim();
         if (!line) return;
-        // fname 그대로 있으면 매칭 (예: 3146079_bk.pin)
         ownedSet.add(line);
-        // 확장자 없이 들어온 경우 대비 — fname 앞 숫자 추출
         const m = line.match(/^(\d+)/);
         if (m) {
-          // ALL_DATA에서 해당 pinNumber를 가진 fname들을 추가
           ALL_DATA.forEach(item => {
             if (item.pinNumber === m[1]) ownedSet.add(item.fname);
           });
         }
       });
-
       const ownedCount = ALL_DATA.filter(item => ownedSet.has(item.fname)).length;
       document.getElementById('uploadInfo').innerHTML =
         `<b>${ownedCount}</b>개 보유 중 / 전체 ${ALL_DATA.length}개`;
-
-      const toggle = document.getElementById('ownedToggle');
-      toggle.disabled = false;
+      document.getElementById('ownedToggle').disabled = false;
       render();
     };
     reader.readAsText(file, 'UTF-8');
   });
 
-  // ── 이벤트 ────────────────────────────────────────────
-  document.getElementById('searchInput').addEventListener('input', render);
-
+  // ── 이벤트 ───────────────────────────────────────────
+  document.getElementById('searchInput').addEventListener('input', () => {
+    selectedPub = null;
+    render();
+  });
   document.getElementById('ownedToggle').addEventListener('change', function() {
     showOwned = this.checked;
     render();
   });
 
-  // ── 유틸 ─────────────────────────────────────────────
   function esc(str) {
     return String(str)
       .replace(/&/g,'&amp;').replace(/</g,'&lt;')
       .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  // ── 초기화 ────────────────────────────────────────────
   loadData();
 </script>
-
 </body>
 </html>
