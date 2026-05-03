@@ -1,6 +1,5 @@
 # 개발 전용 — 커밋 제외
 scripts/
-data/
 data_raw/
 CLAUDE.md
 

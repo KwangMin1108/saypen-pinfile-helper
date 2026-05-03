@@ -301,7 +301,9 @@
   // ── 출판사 태그 ──────────────────────────────────────
   function renderPublisherTags() {
     const pubMap = {};
+    // bookUrl 있는 항목의 출판사만 집계
     ALL_DATA.forEach(item => {
+      if (!item.bookUrl) return;
       const p = item.publisher.trim() || '(출판사 없음)';
       pubMap[p] = (pubMap[p] || 0) + 1;
     });
