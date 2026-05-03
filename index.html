@@ -232,29 +232,29 @@
 
       <div class="howto-content active" id="tab-win">
         <ol>
-          <li>세이펜을 PC에 USB로 연결합니다</li>
-          <li>탐색기에서 세이펜 드라이브 안의 <code>PIN</code> 폴더로 이동합니다</li>
+          <li>세이펜 SD카드를 PC에 연결합니다 (카드리더기 또는 OTG)</li>
+          <li>탐색기에서 SD카드 드라이브 안의 <code>BOOK</code> 폴더로 이동합니다</li>
           <li>주소창에 <code>cmd</code>를 입력하고 Enter를 눌러 명령 프롬프트를 엽니다</li>
           <li>아래 명령어를 입력하고 Enter를 누릅니다:<br>
             <code>dir /b *.pin > pinlist.txt</code>
           </li>
           <li>생성된 <code>pinlist.txt</code> 파일을 위 버튼으로 업로드합니다</li>
         </ol>
-        <p class="note">※ PIN 폴더 경로 예시: <code>D:\PIN</code> 또는 <code>E:\PIN</code></p>
+        <p class="note">※ BOOK 폴더 경로 예시: <code>D:\BOOK</code> 또는 <code>E:\BOOK</code></p>
       </div>
 
       <div class="howto-content" id="tab-mac">
         <ol>
-          <li>세이펜을 Mac에 USB로 연결합니다 (OTG 어댑터 필요)</li>
-          <li>터미널을 열고 세이펜의 PIN 폴더로 이동합니다:<br>
-            <code>cd /Volumes/SAYPEN/PIN</code>
+          <li>세이펜 SD카드를 Mac에 연결합니다 (카드리더기 또는 OTG 어댑터)</li>
+          <li>터미널을 열고 SD카드의 BOOK 폴더로 이동합니다:<br>
+            <code>cd /Volumes/{SD카드 이름}/BOOK</code>
           </li>
-          <li>아래 명령어로 목록 파일을 생성합니다:<br>
+          <li>아래 명령어로 핀파일 목록을 생성합니다:<br>
             <code>ls *.pin > ~/Desktop/pinlist.txt</code>
           </li>
           <li>바탕화면에 생성된 <code>pinlist.txt</code> 파일을 위 버튼으로 업로드합니다</li>
         </ol>
-        <p class="note">※ 볼륨 이름은 세이펜 모델에 따라 다를 수 있습니다</p>
+        <p class="note">※ SD카드 이름 확인: 터미널에서 <code>ls /Volumes/</code> 입력 후 목록에서 확인</p>
       </div>
     </div>
   </div>
